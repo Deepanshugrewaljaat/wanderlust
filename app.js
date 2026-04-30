@@ -33,14 +33,15 @@ main().then(() => {
     console.log(err);
 })
 app.set("trust proxy", 1);
+
 const store = MongoStore.create({
     mongoUrl: process.env.ATLAS_URL,
     crypto: {
         secret: process.env.SECRET,
     },
     touchAfter: 24 * 3600,
+    stringify: false,   
 });
-
 
 app.use(
     session({
@@ -56,7 +57,6 @@ app.use(
         },
     })
 );
-
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -75,9 +75,6 @@ app.use((req, res, next) => {
     res.locals.currUser = req.user;
     next();
 });
-
-
-
 
 app.use("/listing", listingsRouter);
 app.use("/listing/:id/review", reviewRouter);

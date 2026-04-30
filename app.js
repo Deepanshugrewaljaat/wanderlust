@@ -32,31 +32,31 @@ main().then(() => {
 }).catch((err) => {
     console.log(err);
 })
-app.set("trust proxy", 1);
+
+
+const MongoStore = require("connect-mongo");
 
 const store = MongoStore.create({
     mongoUrl: process.env.ATLAS_URL,
-    crypto: {
-        secret: process.env.SECRET,
-    },
-    touchAfter: 24 * 3600,
-    stringify: false,   
+    collectionName: "sessions",
+    ttl: 14 * 24 * 60 * 60, // 14 days
+    autoRemove: "native",
 });
+app.set("trust proxy", 1);
 
-app.use(
-    session({
-        store,
-        secret: process.env.SECRET,
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-            secure: true,
-            httpOnly: true,
-            sameSite: "lax",
-            maxAge: 1000 * 60 * 60,
-        },
-    })
-);
+app.use(session({
+    store,
+    name: "wanderlustSession",
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        maxAge: 1000 * 60 * 60 * 24,
+    },
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());

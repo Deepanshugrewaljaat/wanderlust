@@ -32,7 +32,7 @@ main().then(() => {
 }).catch((err) => {
     console.log(err);
 })
-
+app.set("trust proxy", 1);
 const store = MongoStore.create({
     mongoUrl: process.env.ATLAS_URL,
     crypto: {
@@ -41,6 +41,7 @@ const store = MongoStore.create({
     touchAfter: 24 * 3600,
 });
 
+
 app.use(
     session({
         store,
@@ -48,8 +49,10 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            secure: false,
-            maxAge: 1000 * 60 * 60, // 1 hour
+            secure: true,
+            httpOnly: true,
+            sameSite: "none",
+            maxAge: 1000 * 60 * 60,
         },
     })
 );

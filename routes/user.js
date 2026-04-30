@@ -8,9 +8,7 @@ router.get("/signup", (req, res) => {
     res.render("users/signup.ejs")
 })
 
-router.get("/", (req, res) => {
-  res.redirect("/listing"); 
-});
+
 
 router.post("/signup", async (req, res, next) => {
     try {

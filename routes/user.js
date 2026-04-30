@@ -31,6 +31,10 @@ router.post("/signup", async (req, res, next) => {
     }
 });
 
+router.get("/",(req,res)=>{
+    res.redirect("/listing");
+})
+
 router.get("/login", (req, res) => {
     res.render("users/login.ejs");
 })

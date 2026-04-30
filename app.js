@@ -80,7 +80,7 @@ app.use("/listing", listingsRouter);
 app.use("/listing/:id/review", reviewRouter);
 app.use("/", userRouter);
 app.get("/", (req, res) => {
-    res.redirect("/listing");
+   return res.redirect("/listing");
 });
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = "Something went wrong" } = err;

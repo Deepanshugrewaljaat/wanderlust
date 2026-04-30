@@ -33,9 +33,6 @@ main().then(() => {
     console.log(err);
 })
 
-
-const MongoStore = require("connect-mongo");
-
 const store = MongoStore.create({
     mongoUrl: process.env.ATLAS_URL,
     collectionName: "sessions",

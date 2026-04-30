@@ -1,0 +1,144 @@
+<% layout('layouts/boilerplate.ejs') -%>
+
+    <h3 class="mb-3">Details of Property</h3>
+
+    <div class="container">
+
+        <!-- Image -->
+        <div class="mb-3">
+            <img src="<%= item.image.url %>" class="img-fluid rounded" style="max-height: 400px; object-fit: cover;"
+                alt="property image">
+        </div>
+
+        <!-- Details -->
+        <ul class="list-group mb-3">
+
+            <li class="list-group-item">
+                <strong>Title:</strong>
+                <%= item.title %>
+            </li>
+
+            <li class="list-group-item">
+                <strong>Description:</strong>
+                <%= item.description %>
+            </li>
+
+            <li class="list-group-item">
+                <strong>Price:</strong> ₹<%= item.price.toLocaleString("en-IN") %>
+            </li>
+
+            <li class="list-group-item">
+                <strong>Location:</strong>
+                <%= item.location %>
+            </li>
+
+            <li class="list-group-item">
+                <strong>Country:</strong>
+                <%= item.country %>
+            </li>
+            <li class="list-group-item">
+                <strong>Owner:</strong>
+                <%= item.owner.username %>
+            </li>
+
+        </ul>
+
+
+        <% if(currUser && currUser._id.equals(item.owner._id)){ %>
+
+            <div class="d-flex gap-2">
+
+                <a href="/listing/<%= item._id %>/edit" class="btn btn-warning">
+                    Edit
+                </a>
+
+                <form method="POST" action="/listing/<%= item._id %>?_method=DELETE">
+                    <button class="btn btn-danger">
+                        Delete
+                    </button>
+                </form>
+
+            </div>
+            <% } %>
+
+                <%if(currUser){ %>
+                    <h4 class="mt-4">Add Review</h4>
+                    <form method="POST" action="/listing/<%= item._id %>/review">
+
+                        <div class="mb-3">
+                            <label class="form-label">Comment</label>
+                            <textarea name="review[comment]" class="form-control" placeholder="Write your review"
+                                required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Rating</label>
+                            <input type="number" name="review[rating]" min="1" max="5" class="form-control"
+                                placeholder="Enter rating (1-5)" required>
+                        </div>
+
+                        <button class="btn btn-success">Submit Review</button>
+
+                    </form>
+                    <% } %>
+
+
+
+                        <% if(item.reviews && item.reviews.length> 0) { %>
+
+                            <h4 class="mt-4 mb-3">All Reviews</h4>
+
+                            <div class="row">
+
+                                <% for(let review of item.reviews) { %>
+
+                                    <div class="col-md-6 mb-3">
+
+                                        <div class="card shadow-sm h-100 border">
+
+                                            <div class="card-body">
+
+                                                <!-- Stars -->
+                                                <div class="mb-2">
+                                                    <% let rating=Number(review.rating) || 0; %>
+
+                                                        <% for(let i=1; i <=5; i++) { %>
+                                                            <i
+                                                                class="bi <%= i <= rating ? 'bi-star-fill text-warning' : 'bi-star text-secondary' %>"></i>
+                                                            <% } %>
+                                                </div>
+
+                                                <!-- Comment -->
+                                                <p class="card-text fst-italic">
+                                                    "<%= review.comment %>"
+                                                </p>
+
+                                                <!-- Footer -->
+                                                <div class="d-flex justify-content-between align-items-center mt-3">
+
+                                                    <small class="text-muted">
+                                                        <%= review.author.username %>
+                                                    </small>
+
+                                                    <form method="POST"
+                                                        action="/listing/<%= item._id %>/review/<%= review._id %>?_method=DELETE">
+                                                        <% if(currUser && review.author._id.equals(currUser._id)) { %>
+                                                            <button class="btn btn-sm btn-outline-danger">
+                                                                Delete
+                                                            </button>
+                                                            <% } %>
+                                                    </form>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <% } %>
+
+                            </div>
+                            <% } %>
+    </div>

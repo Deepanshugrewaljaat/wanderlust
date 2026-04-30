@@ -80,14 +80,17 @@ app.use("/listing", listingsRouter);
 app.use("/listing/:id/review", reviewRouter);
 app.use("/", userRouter);
 app.get("/", (req, res) => {
-   return res.redirect("/listing");
+    return res.redirect("/listing");
 });
 app.use((err, req, res, next) => {
+    if (res.headersSent) {
+        return next(err);   // ✅ VERY IMPORTANT
+    }
+
     let { statusCode = 500, message = "Something went wrong" } = err;
 
     res.status(statusCode).render("error.ejs", { message });
 });
-
 app.listen(9000, () => {
     console.log("APP IS LISTENING");
 })

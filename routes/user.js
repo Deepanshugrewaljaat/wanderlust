@@ -5,7 +5,7 @@ const passport = require("passport");
 const { saveRedirectUrl } = require("../middleware.js");
 
 router.get("/signup", (req, res) => {
-    res.render("users/signup.ejs")
+    return res.render("users/signup.ejs")
 })
 
 
@@ -27,11 +27,11 @@ router.post("/signup", async (req, res, next) => {
     } catch (err) {
         console.log(err);
         req.flash("error", err.message);
-        res.redirect("/signup");
+        return res.redirect("/signup");
     }
 });
 router.get("/login", (req, res) => {
-    res.render("users/login.ejs");
+    return res.render("users/login.ejs");
 })
 
 router.post("/login", saveRedirectUrl, passport.authenticate("local", { failureFlash: true, failureRedirect: "/login" }), (req, res) => {

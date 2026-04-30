@@ -48,11 +48,11 @@ app.use(
         store,
         secret: process.env.SECRET,
         resave: false,
-        saveUninitialized: false,
+        saveUninitialized: true,
         cookie: {
             secure: true,
             httpOnly: true,
-            sameSite: "none",
+            sameSite: "lax",
             maxAge: 1000 * 60 * 60,
         },
     })

@@ -21,7 +21,7 @@ router.post("/signup", async (req, res, next) => {
         req.login(registeredUser, (err) => {
             if (err) return next(err);
             req.flash("success", "Welcome to WanderLust!");
-            res.redirect("/listing");
+            return res.redirect("/listing");
         });
 
     } catch (err) {
@@ -30,11 +30,6 @@ router.post("/signup", async (req, res, next) => {
         res.redirect("/signup");
     }
 });
-
-router.get("/",(req,res)=>{
-    res.redirect("/listing");
-})
-
 router.get("/login", (req, res) => {
     res.render("users/login.ejs");
 })

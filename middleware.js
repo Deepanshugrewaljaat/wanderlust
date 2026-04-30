@@ -21,13 +21,13 @@ module.exports.isOwner = async (req, res, next) => {
     const id = req.params.id;
 
     let listing = await Listing.findById(id);
+
     if (!listing.owner._id.equals(res.locals.currUser._id)) {
         req.flash("error", "You dont have permission to edit");
-        res.redirect(`/listing/${id}`);
+        return res.redirect(`/listing/${id}`);   // ✅ stop here
     }
 
-    res.redirect(`/listing/${id}`);
-    next();
+    next();   // ✅ only call next if owner
 }
 
 module.exports.isReviewAuthor = async (req, res, next) => {
